@@ -192,3 +192,4 @@ Feel free to fork this theme and create your own variations! Pull requests for i
 - Qt/QML for the framework
 - Arch Linux community for inspiration
 # GPG signing test
+ signed uzski
