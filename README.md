@@ -191,3 +191,4 @@ Feel free to fork this theme and create your own variations! Pull requests for i
 - SDDM project for the display manager
 - Qt/QML for the framework
 - Arch Linux community for inspiration
+# GPG signing test
