@@ -1,0 +1,16 @@
+[SddmGreeterTheme]
+Name=Hyprlock Style Theme
+Description=SDDM theme matching hyprlock with murder red accents and Japanese text
+Author=uzski
+Copyright=(c) 2024 uzski
+License=GPL-3.0
+Type=sddm-theme
+Version=2.0
+Website=https://github.com/uzski/hyprlock-sddm-theme
+Screenshot=preview.png
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=translations
+Email=uzski@example.com
+Theme-Id=hyprlock-style
+Theme-API=2.0
