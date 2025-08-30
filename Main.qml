@@ -1,366 +1,249 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
+import QtQuick.Window 2.15
 import SddmComponents 2.0
 
 Rectangle {
     id: root
-    width: Screen.width
-    height: Screen.height
+    width: Screen.width || 1920
+    height: Screen.height || 1080
     color: "#000000"
     
-    // Hyprlock colors - matching your theme/colors.conf
-    readonly property color murderColor: "#a31621"
-    readonly property color accentColor: "#FCF7F8"
-    readonly property color bgDarkColor: "#121212"
-    readonly property string fontFamily: "Maple Mono NF"
+    // Apple-style design system
+    readonly property color textPrimary: "#FFFFFF"
+    readonly property color murder: "#a31621"
+    readonly property color textSecondary: Qt.rgba(255, 255, 255, 0.9)
+    readonly property color textTertiary: Qt.rgba(255, 255, 255, 0.6)
+    readonly property string systemFont: "SF Pro Display, -apple-system, Helvetica Neue, sans-serif"
+    readonly property int animDuration: 350
+    
+    property bool isAuthenticating: false
+    property int failedAttempts: 0
     
     Connections {
         target: sddm
         
-        function onLoginSucceeded() {}
+        function onLoginSucceeded() {
+            isAuthenticating = false
+        }
         
         function onLoginFailed() {
+            isAuthenticating = false
             passwordField.text = ""
-            failMessage.visible = true
-            failAnimation.start()
+            failedAttempts++
+            shakeAnimation.start()
+            errorMessage.opacity = 1
+            errorTimer.restart()
         }
     }
     
-    // Background image with hyprlock effects
-    Image {
-        id: backgroundImage
-        anchors.fill: parent
-        source: "assets/background.jpg"
-        fillMode: Image.PreserveAspectCrop
-        cache: false
-        asynchronous: true
-        
-        // Apply blur matching hyprlock settings
-        layer.enabled: true
-        layer.effect: GaussianBlur {
-            radius: 12  // blur_size = 4, blur_passes = 3
-            samples: 32
-            transparentBorder: true
-        }
-    }
-    
-    // Color overlay and adjustments
-    Rectangle {
-        anchors.fill: parent
-        color: murderColor
-        opacity: 0.2  // brightness adjustment
-    }
-    
-    // Contrast/brightness adjustment overlay
-    BrightnessContrast {
-        anchors.fill: backgroundImage
-        source: backgroundImage
-        brightness: -0.2  // 0.8 brightness in hyprlock = -0.2 here
-        contrast: 0.3     // 1.3 contrast in hyprlock = 0.3 here
-    }
-    
-    // Top welcome text - Japanese message like in hyprlock
-    Text {
-        id: welcomeText
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: parent.height * 0.15  // position = 0, -570 relative positioning
-        text: "愛してる、一秒一秒、毎分、毎時間、毎日"
-        color: murderColor
-        font.pixelSize: 32
-        font.family: fontFamily
-        font.bold: true
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            radius: 4
-            samples: 9
-            color: "#80000000"
-        }
-    }
-    
-    // Center area container
+    // Beautiful blurred background - Apple style
     Item {
-        anchors.centerIn: parent
-        width: 400
-        height: 400
+        anchors.fill: parent
         
-        // Current time display - matching hyprlock exactly
-        Text {
-            id: timeDisplay
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -35
-            text: Qt.formatTime(new Date(), "HH:mm:ss")
-            color: accentColor
-            font.pixelSize: 64
-            font.family: fontFamily
-            font.bold: true
-            
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                radius: 4
-                samples: 9
-                color: "#80000000"
-            }
-        }
-        
-        // Current song placeholder (since we can't run the script in SDDM)
-        Text {
-            id: songDisplay
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -107
-            text: ""  // Empty by default or you can add a static message
-            color: accentColor
-            font.pixelSize: 17
-            font.family: fontFamily
-            visible: text !== ""
-            
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                radius: 4
-                samples: 9
-                color: "#80000000"
-            }
-        }
-        
-        // User avatar - circular like hyprlock
+        // Wallpaper
         Image {
-            id: userAvatar
+            id: wallpaper
+            anchors.fill: parent
+            source: "assets/darkcityariel.png"
+            fillMode: Image.PreserveAspectCrop
+            smooth: true
+            visible: false
+        }
+        
+        // High-quality blur
+        GaussianBlur {
+            id: blurLayer1
+            anchors.fill: parent
+            source: wallpaper
+            radius: 48
+            samples: 97
+            visible: false
+        }
+        
+        GaussianBlur {
+            anchors.fill: parent
+            source: blurLayer1
+            radius: 48
+            samples: 97
+        }
+        
+        // Subtle dark overlay
+        Rectangle {
+            anchors.fill: parent
+            color: "#000000"
+            opacity: 0.4
+        }
+    }
+    
+    
+    // Clean, minimal login area - no card, just content
+    Column {
+        id: loginContainer
+        anchors.centerIn: parent
+        spacing: 40
+            
+        // Time display
+        Text {
+            id: timeText
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 100
+            text: Qt.formatTime(new Date(), "h:mm")
+            color: textPrimary
+            font.pixelSize: 96
+            font.family: systemFont
+            font.weight: Font.Bold
+            font.letterSpacing: -3
+            antialiasing: true
+        }
+        
+        // User avatar - clean circle
+        Item {
             width: 100
             height: 100
-            source: "assets/avatar.jpg"
-            fillMode: Image.PreserveAspectCrop
+            anchors.horizontalCenter: parent.horizontalCenter
             
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: userAvatar.width
-                    height: userAvatar.height
-                    radius: width / 2
-                    color: "white"
+            Image {
+                id: avatarImage
+                anchors.fill: parent
+                source: "assets/ronaldo-shadow.jpg"
+                fillMode: Image.PreserveAspectCrop
+                smooth: true
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: avatarImage.width
+                        height: avatarImage.height
+                        radius: width / 2
+                    }
                 }
             }
+        }
+        
+        // Japanese greeting
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "愛してる、一秒一秒、毎分、毎時間、毎日"
+            color: textSecondary
+            font.pixelSize: 18
+            font.family: systemFont
+            font.weight: Font.Light
+            antialiasing: true
+        }
+        
+        // Clean password field - no borders, just blur background
+        Item {
+            width: 280
+            height: 44
+            anchors.horizontalCenter: parent.horizontalCenter
             
+            // Blur background
             Rectangle {
                 anchors.fill: parent
-                radius: width / 2
-                color: "transparent"
-                border.color: accentColor
-                border.width: 2
-                opacity: 0.5
+                radius: 22
+                color: Qt.rgba(255, 255, 255, 0.15)
             }
             
-            // Shadow effect
-            DropShadow {
-                anchors.fill: userAvatar
-                source: userAvatar
-                radius: 8
-                samples: 17
-                color: "#80000000"
-                transparentBorder: true
-            }
-        }
-    }
-    
-    // Password input field - matching hyprlock exactly
-    Item {
-        id: passwordContainer
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: parent.height * 0.08  // position = 0, 50 valign = bottom
-        width: 300
-        height: 50
-        
-        Rectangle {
-            id: passwordBackground
-            anchors.fill: parent
-            radius: 20
-            color: bgDarkColor
-            border.width: 2
-            border.color: passwordField.activeFocus ? murderColor : Qt.rgba(252, 247, 248, 0.3)
-            
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                radius: 8
-                samples: 17
-                color: "#80000000"
-            }
-            
-            Behavior on border.color {
-                ColorAnimation { duration: 300 }
+            TextField {
+                id: passwordField
+                anchors.fill: parent
+                anchors.leftMargin: 20
+                anchors.rightMargin: 20
+                echoMode: TextInput.Password
+                placeholderText: "Enter Password"
+                font.pixelSize: 14
+                font.family: systemFont
+                font.letterSpacing: 1
+                color: textPrimary
+                placeholderTextColor: textTertiary
+                horizontalAlignment: TextInput.AlignHCenter
+                verticalAlignment: TextInput.AlignVCenter
+                selectByMouse: true
+                passwordCharacter: "●"
+                
+                background: Rectangle {
+                    color: "transparent"
+                }
+                
+                Keys.onReturnPressed: {
+                    if (text.length > 0 && !isAuthenticating) {
+                        isAuthenticating = true
+                        // Use last session or default to first available session
+                        var sessionIndex = sessionModel.lastIndex >= 0 ? sessionModel.lastIndex : 0
+                        var username = userModel.lastUser || "uzski"
+                        sddm.login(username, passwordField.text, sessionIndex)
+                    }
+                }
+                
+                onTextChanged: {
+                    if (errorMessage.opacity > 0) {
+                        errorMessage.opacity = 0
+                    }
+                }
             }
         }
         
-        TextField {
-            id: passwordField
-            anchors.fill: parent
-            anchors.margins: 2
-            echoMode: TextInput.Password
-            placeholderText: "Password..."
-            font.pixelSize: 16
-            font.family: fontFamily
-            font.italic: true
-            color: accentColor
-            placeholderTextColor: Qt.rgba(252, 247, 248, 0.5)
-            horizontalAlignment: TextInput.AlignHCenter
-            verticalAlignment: TextInput.AlignVCenter
-            
-            background: Rectangle {
-                color: "transparent"
-            }
-            
-            Keys.onReturnPressed: {
-                var sessionIndex = (sessionModel && sessionModel.lastIndex !== undefined && sessionModel.lastIndex >= 0) ? sessionModel.lastIndex : 0
-                var username = (userModel && userModel.lastUser) ? userModel.lastUser : ""
-                sddm.login(username, passwordField.text, sessionIndex)
-            }
-            
-            onTextChanged: {
-                failMessage.visible = false
-            }
-        }
-        
-        // Fail message
+        // Error message - subtle
         Text {
-            id: failMessage
+            id: errorMessage
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.bottom
-            anchors.topMargin: 10
-            text: "Is it really you (1)"
-            color: murderColor
-            font.pixelSize: 14
-            font.family: fontFamily
-            font.italic: true
-            visible: false
+            text: "Incorrect password"
+            color: Qt.rgba(255, 255, 255, 0.7)
+            font.pixelSize: 12
+            font.family: systemFont
+            opacity: 0
             
-            SequentialAnimation {
-                id: failAnimation
-                NumberAnimation {
-                    target: passwordContainer
-                    property: "x"
-                    from: passwordContainer.x - 10
-                    to: passwordContainer.x + 10
-                    duration: 50
-                }
-                NumberAnimation {
-                    target: passwordContainer
-                    property: "x"
-                    from: passwordContainer.x + 10
-                    to: passwordContainer.x - 10
-                    duration: 50
-                }
-                NumberAnimation {
-                    target: passwordContainer
-                    property: "x"
-                    from: passwordContainer.x - 10
-                    to: passwordContainer.x
-                    duration: 50
-                }
+            Behavior on opacity {
+                NumberAnimation { duration: animDuration }
             }
+            
+            Timer {
+                id: errorTimer
+                interval: 3000
+                onTriggered: errorMessage.opacity = 0
+            }
+        }
+        
+    }
+    
+    // Subtle shake animation
+    SequentialAnimation {
+        id: shakeAnimation
+        NumberAnimation {
+            target: loginContainer
+            property: "x"
+            from: loginContainer.x
+            to: loginContainer.x - 8
+            duration: 60
+        }
+        NumberAnimation {
+            target: loginContainer
+            property: "x"
+            to: loginContainer.x + 8
+            duration: 60
+        }
+        NumberAnimation {
+            target: loginContainer
+            property: "x"
+            to: loginContainer.x - 8
+            duration: 60
+        }
+        NumberAnimation {
+            target: loginContainer
+            property: "x"
+            to: loginContainer.x
+            duration: 60
         }
     }
     
-    // Hidden session selector (required by SDDM but invisible)
-    ComboBox {
-        id: session
-        visible: false
-        model: sessionModel
-        // Safely handle undefined or null lastIndex
-        Component.onCompleted: {
-            if (sessionModel && sessionModel.lastIndex !== undefined && sessionModel.lastIndex >= 0) {
-                currentIndex = sessionModel.lastIndex
-            } else {
-                currentIndex = 0
-            }
-        }
-    }
     
-    // Hidden username field (uses last user)
-    property string userName: (userModel && userModel.lastUser) ? userModel.lastUser : ""
-    
-    // Timer for updating clock
+    // Clock update timer
     Timer {
-        interval: 1000
+        interval: 60000
         running: true
         repeat: true
         onTriggered: {
-            timeDisplay.text = Qt.formatTime(new Date(), "HH:mm:ss")
-        }
-    }
-    
-    // Power buttons - minimal and matching hyprlock style
-    Row {
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.margins: 30
-        spacing: 15
-        opacity: 0.7
-        
-        // Power off
-        MouseArea {
-            width: 32
-            height: 32
-            hoverEnabled: true
-            cursorShape: Qt.PointingHandCursor
-            onClicked: sddm.powerOff()
-            
-            Rectangle {
-                anchors.fill: parent
-                radius: 16
-                color: "transparent"
-                border.color: accentColor
-                border.width: 1
-                opacity: parent.containsMouse ? 1 : 0.5
-                
-                Behavior on opacity {
-                    NumberAnimation { duration: 200 }
-                }
-            }
-            
-            Text {
-                anchors.centerIn: parent
-                text: "⏻"
-                color: accentColor
-                font.pixelSize: 16
-            }
-        }
-        
-        // Reboot
-        MouseArea {
-            width: 32
-            height: 32
-            hoverEnabled: true
-            cursorShape: Qt.PointingHandCursor
-            onClicked: sddm.reboot()
-            
-            Rectangle {
-                anchors.fill: parent
-                radius: 16
-                color: "transparent"
-                border.color: accentColor
-                border.width: 1
-                opacity: parent.containsMouse ? 1 : 0.5
-                
-                Behavior on opacity {
-                    NumberAnimation { duration: 200 }
-                }
-            }
-            
-            Text {
-                anchors.centerIn: parent
-                text: "↻"
-                color: accentColor
-                font.pixelSize: 16
-            }
+            timeText.text = Qt.formatTime(new Date(), "h:mm")
         }
     }
     
