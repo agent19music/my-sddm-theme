@@ -1,195 +1,234 @@
-# Custom Dark SDDM Theme
+# Hyprlock-Style SDDM Theme
 
-A modern, minimalist SDDM login screen theme with blur effects and customizable options.
+A beautiful dark SDDM theme inspired by Hyprlock, featuring Japanese text, murder-red accents, and a sleek modern design.
 
-## Features
+![Theme Preview](assets/preview.png)
 
-- 🎨 Modern dark design with glassmorphism effects
-- 🔐 Clean login interface with username and password fields
-- 🖼️ Customizable background image with blur support
-- ⏰ Live clock and date display
-- 🎯 Session selector for multiple desktop environments
-- ⚡ Power options (shutdown, reboot, suspend)
-- 🎭 Smooth animations and transitions
-- 🔧 Highly customizable through theme.conf
-- 📱 Responsive design that works on all screen sizes
+## 🎨 Features
 
-## Preview
+- **Murder-Red Aesthetic** - Dark theme with striking red (#a31621) accents
+- **Japanese Welcome Text** - "愛してる、一秒一秒、毎分、毎時間、毎日" (I love you, every second, every minute, every hour, every day)
+- **Blurred Background** - Beautiful blur effects on background image
+- **Live Clock** - Real-time clock display in HH:mm:ss format
+- **Circular Avatar** - Clean circular user avatar with border
+- **Smooth Animations** - Password field animations and hover effects
+- **Power Controls** - Minimalist power off and reboot buttons
+- **Hyprlock-Inspired** - Matching the popular Hyprlock screen locker aesthetic
 
-![Theme Preview](preview.png)
+## 📦 What's Included
 
-## Installation
+The theme comes with default images to get you started:
+- **Background**: Dark city aerial view (`assets/background.jpg`) - A moody cityscape
+- **Avatar**: Shadow profile image (`assets/avatar.jpg`) - Default user avatar
 
-### Automatic Installation
+## 🚀 Quick Installation
 
-1. Clone or download this theme to your local machine
-2. Navigate to the theme directory
-3. Run the installation script with sudo privileges:
+1. **Clone this repository:**
+   ```bash
+   git clone https://github.com/uzski/custom-sddm-theme.git
+   cd custom-sddm-theme
+   ```
 
-```bash
-cd ~/Development/custom-sddm-theme
-sudo ./install.sh
-```
+2. **Run the installer:**
+   ```bash
+   sudo ./install.sh
+   ```
 
-The installer will:
-- Check for SDDM installation
-- Backup any existing theme with the same name
-- Install the theme to `/usr/share/sddm/themes/`
-- Configure SDDM to use the new theme
-- Optionally enable SDDM as your display manager
+3. **Follow the prompts to:**
+   - Install the theme
+   - Test it in preview mode
+   - Enable SDDM as your display manager
 
-### Manual Installation
+That's it! The theme is ready to use with the included images.
 
-1. Copy the theme directory to the SDDM themes folder:
-```bash
-sudo cp -r ~/Development/custom-sddm-theme /usr/share/sddm/themes/custom-dark-theme
-```
+## 🎨 Customization Guide
 
-2. Set proper permissions:
-```bash
-sudo chmod -R 755 /usr/share/sddm/themes/custom-dark-theme
-```
+### Change the Background Image
 
-3. Configure SDDM to use the theme:
-```bash
-sudo nano /etc/sddm.conf.d/theme.conf
-```
-
-Add the following content:
-```ini
-[Theme]
-Current=custom-dark-theme
-```
-
-4. Enable SDDM service (if not already enabled):
-```bash
-sudo systemctl enable sddm
-```
-
-## Customization
-
-### Quick Customization
-
-Edit the `theme.conf` file to customize various aspects of the theme:
+The theme includes a dark city aerial view by default. To use your own:
 
 ```bash
-sudo nano /usr/share/sddm/themes/custom-dark-theme/theme.conf
+# Copy your image to the assets folder
+cp /path/to/your/wallpaper.jpg assets/background.jpg
+
+# If already installed, update the theme
+sudo cp assets/background.jpg /usr/share/sddm/themes/hyprlock-style/assets/
 ```
 
-### Customizable Options
+**Tips:**
+- Recommended resolution: 1920x1080 or higher
+- Dark images work best with the theme's color scheme
+- The theme automatically applies blur and color overlays
 
-#### Colors
-- `accentColor` - Primary accent color for buttons and focus states
-- `textColor` - Main text color
-- `errorColor` - Color for error messages
-- `inputBackgroundColor` - Background color for input fields
-- `loginBoxColor` - Background color for the login container
+### Change the Avatar Image
 
-#### Fonts
-- `fontFamily` - Font family for all text
-- `titleFontSize` - Welcome text size
-- `timeFontSize` - Clock display size
-- `inputFontSize` - Input field text size
+The theme includes a default avatar. To use your own:
 
-#### Layout
-- `loginBoxWidth` - Width of the login container
-- `loginBoxHeight` - Height of the login container
-- `cornerRadius` - Border radius for UI elements
-- `buttonHeight` - Height of buttons
-- `inputHeight` - Height of input fields
-
-#### Features
-- `showDateTime` - Show/hide clock and date
-- `showAvatar` - Show/hide user avatar
-- `showPowerButtons` - Show/hide power options
-- `showSessionSelector` - Show/hide session selector
-- `enableBlur` - Enable/disable blur effects
-- `autoFocusPassword` - Auto-focus password field
-
-### Changing the Background
-
-Replace the background image:
 ```bash
-sudo cp /path/to/your/image.jpg /usr/share/sddm/themes/custom-dark-theme/assets/background.jpg
+# Copy your avatar to the assets folder
+cp /path/to/your/avatar.jpg assets/avatar.jpg
+
+# If already installed, update the theme
+sudo cp assets/avatar.jpg /usr/share/sddm/themes/hyprlock-style/assets/
 ```
 
-Or edit `theme.conf` to point to a different image:
-```ini
-background=/path/to/your/wallpaper.jpg
+**Tips:**
+- Any size works (will be cropped to circle)
+- Square images work best
+- High contrast images look great with the dark theme
+
+### Customize Colors
+
+Edit `Main.qml` to change the color scheme:
+
+```qml
+// Core color scheme (lines 13-15)
+readonly property color murderColor: "#a31621"  // Main accent (red)
+readonly property color accentColor: "#FCF7F8"  // Text/borders (white)
+readonly property color bgDarkColor: "#121212"  // Dark backgrounds
 ```
 
-### Changing the User Avatar
+Popular color combinations:
+- **Cyberpunk**: `murderColor: "#00ffff"`, `accentColor: "#ff00ff"`
+- **Forest**: `murderColor: "#2d5016"`, `accentColor: "#a4c2a8"`
+- **Ocean**: `murderColor: "#006994"`, `accentColor: "#b8dbd9"`
+- **Sunset**: `murderColor: "#ff6b35"`, `accentColor: "#f7931e"`
 
-Replace the default avatar:
-```bash
-sudo cp /path/to/avatar.png /usr/share/sddm/themes/custom-dark-theme/assets/avatar.png
+### Change the Welcome Text
+
+Edit line 69 in `Main.qml`:
+
+```qml
+text: "愛してる、一秒一秒、毎分、毎時間、毎日"
 ```
 
-## Testing
+Some alternatives:
+- English: `text: "Welcome back"`
+- Motivational: `text: "今日も頑張ろう"` (Let's do our best today)
+- Minimal: `text: ""` (no text)
+- Custom: `text: "Your message here"`
+
+### Change the Font
+
+Edit line 16 in `Main.qml`:
+
+```qml
+readonly property string fontFamily: "Maple Mono NF"
+```
+
+Good monospace fonts for this theme:
+- `"JetBrains Mono"`
+- `"Fira Code"`
+- `"Source Code Pro"`
+- `"Cascadia Code"`
+
+### Advanced Customization
+
+#### Blur Effect
+Adjust blur intensity in `Main.qml` (line 41-42):
+```qml
+radius: 12  // Increase for more blur
+samples: 32 // Increase for smoother blur
+```
+
+#### Password Field Size
+Edit `Main.qml` (line 179-180):
+```qml
+width: 300  // Make wider/narrower
+height: 50  // Make taller/shorter
+```
+
+#### Clock Format
+Change time format in `Main.qml` (line 95 & 296):
+```qml
+text: Qt.formatTime(new Date(), "HH:mm:ss")  // 24-hour
+text: Qt.formatTime(new Date(), "hh:mm AP")  // 12-hour with AM/PM
+```
+
+## 🔧 Testing Your Changes
 
 Test the theme without logging out:
+
 ```bash
-sddm-greeter --test-mode --theme /usr/share/sddm/themes/custom-dark-theme
+# Test directly from your development folder
+sddm-greeter --test-mode --theme .
+
+# Or test installed version
+sddm-greeter --test-mode --theme /usr/share/sddm/themes/hyprlock-style
 ```
 
-Press `Ctrl+Alt+F2` to return to your session.
+Press `Ctrl+C` to exit test mode.
 
-## Troubleshooting
-
-### Theme not showing up
-- Ensure SDDM is installed: `sudo pacman -S sddm`
-- Check if the theme is in the correct directory: `ls /usr/share/sddm/themes/`
-- Verify the configuration: `cat /etc/sddm.conf.d/theme.conf`
-
-### Black screen or theme not loading
-- Check the Main.qml file for syntax errors
-- Ensure all required QML modules are installed: `sudo pacman -S qt5-quickcontrols2 qt5-graphicaleffects`
-- Check SDDM logs: `journalctl -u sddm -e`
-
-### Login fails
-- Ensure your username and password are correct
-- Check if the selected session exists
-- Review system logs: `journalctl -xe`
-
-## File Structure
+## 📁 File Structure
 
 ```
-custom-dark-theme/
+custom-sddm-theme/
 ├── assets/
-│   ├── background.jpg    # Background image
-│   └── avatar.png        # Default user avatar
-├── components/           # Additional QML components (if needed)
-├── Main.qml             # Main QML interface file
-├── metadata.desktop     # Theme metadata
-├── theme.conf          # Theme configuration
-├── install.sh          # Installation script
-└── README.md           # This file
+│   ├── background.jpg    # Background image (dark city)
+│   └── avatar.jpg        # User avatar (shadow profile)
+├── Main.qml              # Main theme file
+├── theme.conf            # Configuration
+├── metadata.desktop      # Theme metadata
+├── install.sh            # Installation script
+└── README.md             # This file
 ```
 
-## Requirements
+## 🛠️ Troubleshooting
 
-- SDDM (Simple Desktop Display Manager)
-- Qt 5.15 or higher
-- QtQuick 2.15
-- QtQuick.Controls 2.15
-- QtGraphicalEffects 1.15
+### Theme not appearing
+```bash
+# Check if SDDM is using the theme
+cat /etc/sddm.conf.d/theme.conf
 
-## License
+# Should show:
+# [Theme]
+# Current=hyprlock-style
+```
 
-This theme is released under the GPL-3.0 License.
+### Images not showing
+- Ensure images are in `assets/` folder
+- Check file permissions: `ls -la /usr/share/sddm/themes/hyprlock-style/assets/`
+- Images should be readable: `chmod 644 assets/*`
 
-## Author
+### Testing fails
+- Install required packages:
+  ```bash
+  # Arch Linux
+  sudo pacman -S sddm qt5-quickcontrols2 qt5-graphicaleffects
+  
+  # Ubuntu/Debian
+  sudo apt install sddm qml-module-qtquick-controls2 qml-module-qtgraphicaleffects
+  ```
 
-Created by uzski
+## 📦 Requirements
 
-## Contributing
+- SDDM
+- Qt 5.15+
+- QtQuick Controls 2
+- QtGraphicalEffects
 
-Feel free to fork this theme and create your own variations! Pull requests for improvements are welcome.
+## 📄 License
 
-## Credits
+MIT License - Feel free to modify and share!
 
-- SDDM project for the display manager
-- Qt/QML for the framework
-- Arch Linux community for inspiration
-# GPG signing test
- signed uzski
+## 👤 Author
+
+Created by **uzski**
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Fork and create your own version
+- Submit pull requests with improvements
+- Share your custom color schemes
+- Report issues
+
+## 🙏 Credits
+
+- Inspired by Hyprlock's aesthetic
+- Dark city background and shadow avatar included as starter images
+- SDDM and Qt/QML teams for the framework
+
+---
+
+**Enjoy your new login screen! 🎉**
