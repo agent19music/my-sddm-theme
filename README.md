@@ -2,18 +2,18 @@
 
 A beautiful dark SDDM theme inspired by Hyprlock, featuring Japanese text, murder-red accents, and a sleek modern design.
 
-![Theme Preview](assets/preview.png)
+![Theme Preview](assets/preview.jpg)
 
 ## 🎨 Features
 
-- **Murder-Red Aesthetic** - Dark theme with striking red (#a31621) accents
-- **Japanese Welcome Text** - "愛してる、一秒一秒、毎分、毎時間、毎日" (I love you, every second, every minute, every hour, every day)
-- **Blurred Background** - Beautiful blur effects on background image
 - **Live Clock** - Real-time clock display in HH:mm:ss format
 - **Circular Avatar** - Clean circular user avatar with border
 - **Smooth Animations** - Password field animations and hover effects
 - **Power Controls** - Minimalist power off and reboot buttons
 - **Hyprlock-Inspired** - Matching the popular Hyprlock screen locker aesthetic
+- **Japanese Welcome Text** - "愛してる、一秒一秒、毎分、毎時間、毎日" (I love you, every second, every minute, every hour, every day)
+- **Blurred Background** - Beautiful blur effects on background image
+
 
 ## 📦 What's Included
 
