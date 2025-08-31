@@ -5,6 +5,7 @@ A clean, minimal, and modern SDDM login theme inspired by Hyprlock. Features a b
 
 ![Theme Preview](https://pub-c6a134c8e1fd4881a475bf80bc0717ba.r2.dev/sddm-preview.png)
 
+
 ## ✨ Features
 
 - **Live Clock** – Real-time clock display (large, centered)
