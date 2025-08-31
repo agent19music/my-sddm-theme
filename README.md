@@ -2,7 +2,7 @@
 
 A beautiful dark SDDM theme inspired by Hyprlock, featuring Japanese text, murder-red accents, and a sleek modern design.
 
-![Theme Preview](assets/preview.jpg)
+![Theme Preview](https://pub-c6a134c8e1fd4881a475bf80bc0717ba.r2.dev/sddm-preview.png)
 
 ## 🎨 Features
 
