@@ -1,25 +1,26 @@
-# Hyprlock-Style SDDM Theme
 
-A beautiful dark SDDM theme inspired by Hyprlock, featuring Japanese text, murder-red accents, and a sleek modern design.
+# Minimal SDDM Theme
+
+A clean, minimal, and modern SDDM login theme inspired by Hyprlock. Features a blurred background, circular avatar, smooth animations, and a simple layout with a focus on clarity and elegance.
 
 ![Theme Preview](assets/preview.jpg)
 
-## 🎨 Features
+## ✨ Features
 
-- **Live Clock** - Real-time clock display in HH:mm:ss format
-- **Circular Avatar** - Clean circular user avatar with border
-- **Smooth Animations** - Password field animations and hover effects
-- **Power Controls** - Minimalist power off and reboot buttons
-- **Hyprlock-Inspired** - Matching the popular Hyprlock screen locker aesthetic
-- **Japanese Welcome Text** - "愛してる、一秒一秒、毎分、毎時間、毎日" (I love you, every second, every minute, every hour, every day)
-- **Blurred Background** - Beautiful blur effects on background image
-
+- **Live Clock** – Real-time clock display (large, centered)
+- **Circular Avatar** – Clean, borderless user avatar
+- **Smooth Animations** – Subtle shake on login error, animated transitions
+- **Minimal UI** – No cards or borders, just content
+- **Blurred Background** – High-quality blur with dark overlay
+- **Japanese Welcome Text** – "愛してる、一秒一秒、毎分、毎時間、毎日" (I love you, every second, every minute, every hour, every day)
 
 ## 📦 What's Included
 
-The theme comes with default images to get you started:
-- **Background**: Dark city aerial view (`assets/background.jpg`) - A moody cityscape
-- **Avatar**: Shadow profile image (`assets/avatar.jpg`) - Default user avatar
+- **Background**: Blurred cityscape (`assets/background.jpg` or `assets/darkcityariel.png`)
+- **Avatar**: Shadow profile image (`assets/avatar.jpg` or `assets/ronaldo-shadow.jpg`)
+- **Main.qml**: Main theme file (all UI logic)
+- **theme.conf**: Theme configuration
+- **metadata.desktop**: Theme metadata
 
 ## 🚀 Quick Installation
 
@@ -45,7 +46,7 @@ That's it! The theme is ready to use with the included images.
 
 ### Change the Background Image
 
-The theme includes a dark city aerial view by default. To use your own:
+Replace the default background with your own:
 
 ```bash
 # Copy your image to the assets folder
@@ -58,11 +59,11 @@ sudo cp assets/background.jpg /usr/share/sddm/themes/hyprlock-style/assets/
 **Tips:**
 - Recommended resolution: 1920x1080 or higher
 - Dark images work best with the theme's color scheme
-- The theme automatically applies blur and color overlays
+- The theme automatically applies blur and overlay
 
 ### Change the Avatar Image
 
-The theme includes a default avatar. To use your own:
+Replace the default avatar:
 
 ```bash
 # Copy your avatar to the assets folder
@@ -73,30 +74,32 @@ sudo cp assets/avatar.jpg /usr/share/sddm/themes/hyprlock-style/assets/
 ```
 
 **Tips:**
-- Any size works (will be cropped to circle)
-- Square images work best
+- Any size works (will be cropped to a circle)
+- Square images look best
 - High contrast images look great with the dark theme
 
-### Customize Colors
+### Customize Colors & Fonts
 
-Edit `Main.qml` to change the color scheme:
+Edit `Main.qml` for color and font changes:
 
 ```qml
-// Core color scheme (lines 13-15)
-readonly property color murderColor: "#a31621"  // Main accent (red)
-readonly property color accentColor: "#FCF7F8"  // Text/borders (white)
-readonly property color bgDarkColor: "#121212"  // Dark backgrounds
+// Core color scheme (lines 8-11)
+readonly property color textPrimary: "#FFFFFF"      // Main text
+readonly property color textSecondary: Qt.rgba(255,255,255,0.9) // Subtle text
+readonly property color textTertiary: Qt.rgba(255,255,255,0.6) // Placeholder text
+readonly property string systemFont: "SF Pro Display, -apple-system, Helvetica Neue, sans-serif"
 ```
 
-Popular color combinations:
-- **Cyberpunk**: `murderColor: "#00ffff"`, `accentColor: "#ff00ff"`
-- **Forest**: `murderColor: "#2d5016"`, `accentColor: "#a4c2a8"`
-- **Ocean**: `murderColor: "#006994"`, `accentColor: "#b8dbd9"`
-- **Sunset**: `murderColor: "#ff6b35"`, `accentColor: "#f7931e"`
+**Font:**
+Change the font by editing the `systemFont` property (line 11):
+
+```qml
+readonly property string systemFont: "Your Font Here, sans-serif"
+```
 
 ### Change the Welcome Text
 
-Edit line 69 in `Main.qml`:
+Edit the greeting (line 74):
 
 ```qml
 text: "愛してる、一秒一秒、毎分、毎時間、毎日"
@@ -108,41 +111,34 @@ Some alternatives:
 - Minimal: `text: ""` (no text)
 - Custom: `text: "Your message here"`
 
-### Change the Font
+### Blur Effect
 
-Edit line 16 in `Main.qml`:
+Adjust blur intensity in `Main.qml` (lines 32-39):
 
 ```qml
-readonly property string fontFamily: "Maple Mono NF"
+GaussianBlur {
+    radius: 48  // Increase for more blur
+    samples: 97 // Increase for smoother blur
+}
 ```
 
-Good monospace fonts for this theme:
-- `"JetBrains Mono"`
-- `"Fira Code"`
-- `"Source Code Pro"`
-- `"Cascadia Code"`
+### Password Field Size
 
-### Advanced Customization
+Edit `Main.qml` (lines 92-93):
 
-#### Blur Effect
-Adjust blur intensity in `Main.qml` (line 41-42):
 ```qml
-radius: 12  // Increase for more blur
-samples: 32 // Increase for smoother blur
+width: 280  // Make wider/narrower
+height: 44  // Make taller/shorter
 ```
 
-#### Password Field Size
-Edit `Main.qml` (line 179-180):
-```qml
-width: 300  // Make wider/narrower
-height: 50  // Make taller/shorter
-```
+### Clock Format
 
-#### Clock Format
-Change time format in `Main.qml` (line 95 & 296):
+Change time format in `Main.qml` (lines 61 & 168):
+
 ```qml
-text: Qt.formatTime(new Date(), "HH:mm:ss")  // 24-hour
-text: Qt.formatTime(new Date(), "hh:mm AP")  // 12-hour with AM/PM
+text: Qt.formatTime(new Date(), "h:mm")  // 24-hour
+// Or for 12-hour with AM/PM:
+text: Qt.formatTime(new Date(), "hh:mm AP")
 ```
 
 ## 🔧 Testing Your Changes
@@ -164,8 +160,8 @@ Press `Ctrl+C` to exit test mode.
 ```
 custom-sddm-theme/
 ├── assets/
-│   ├── background.jpg    # Background image (dark city)
-│   └── avatar.jpg        # User avatar (shadow profile)
+│   ├── background.jpg    # Background image
+│   └── avatar.jpg        # User avatar
 ├── Main.qml              # Main theme file
 ├── theme.conf            # Configuration
 ├── metadata.desktop      # Theme metadata
@@ -209,11 +205,11 @@ cat /etc/sddm.conf.d/theme.conf
 
 ## 📄 License
 
-MIT License - Feel free to modify and share!
+MIT License – Feel free to modify and share!
 
 ## 👤 Author
 
-Created by **uzski**
+Created by **sean**
 
 ## 🤝 Contributing
 
@@ -231,4 +227,4 @@ Contributions are welcome! Feel free to:
 
 ---
 
-**Enjoy your new login screen! 🎉**
+**Enjoy your new minimal login screen!**
