@@ -3,7 +3,7 @@
 
 A clean, minimal, and modern SDDM login theme inspired by Hyprlock. Features a blurred background, circular avatar, smooth animations, and a simple layout with a focus on clarity and elegance.
 
-![Theme Preview](assets/preview.jpg)
+![Theme Preview](https://pub-c6a134c8e1fd4881a475bf80bc0717ba.r2.dev/sddm-preview.png)
 
 ## ✨ Features
 
